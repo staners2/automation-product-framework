@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_extensions",  # для print sql query shell_plus
     "django_cron",  # django crontab
-    "drf_yasg" # swagger
+    "drf_yasg",  # swagger
 ]
 
 MIDDLEWARE = [

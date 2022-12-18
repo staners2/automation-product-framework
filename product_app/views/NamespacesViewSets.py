@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 
-from product_app.models import NamespacesModel
+from product_app.models.NamespacesModel import NamespacesModel
 from product_app.serializers.NamespacesSerializer import NamespacesSerializer
 
 

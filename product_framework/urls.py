@@ -51,29 +51,25 @@ urlpatterns += [
 schema_view = get_schema_view(  # new
     openapi.Info(
         title="Automation product framework",
-        default_version='v1',
+        default_version="v1",
         description="Продуктовый фреймворк",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="dima.aratin0@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     # url=f'{settings.APP_URL}/api/v3/',
-    patterns=[path('api/', include(router.urls)), ],
+    patterns=[
+        path("api/", include(router.urls)),
+    ],
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns += [
     path(
-        'swagger/',
-        TemplateView.as_view(
-            template_name='swagger.html',
-            extra_context={'schema_url': 'openapi-schema'}
-        ),
-        name='swagger'),
-    path(  # new
-        r'^swagger(?P<format>\.json|\.yaml)$',
-        schema_view.without_ui(cache_timeout=0),
-        name='schema-json'),
+        "swagger/",
+        TemplateView.as_view(template_name="swagger.html", extra_context={"schema_url": "openapi-schema"}),
+        name="swagger",
+    ),
+    path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),  # new
 ]
-

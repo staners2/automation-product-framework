@@ -1,7 +1,7 @@
 from django_filters import DateFilter
 from django_filters import FilterSet
 
-from product_app.models import EventsModel, PlansModel
+from product_app.models.PlansModel import PlansModel
 
 
 class PlansDateFilter(FilterSet):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from product_app.models import NamespacesModel
+from product_app.models.NamespacesModel import NamespacesModel
 
 
 class NamespacesSerializer(serializers.ModelSerializer):
