@@ -1,5 +1,7 @@
 from datetime import datetime
+from decimal import Decimal
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from datetime import date
 from django.utils.translation import gettext as _
@@ -13,7 +15,7 @@ class EventTypesModel(models.Model):
     id = models.BigAutoField(name="id", primary_key=True)
     title = models.TextField(name="title", help_text="Название события")
     point = models.DecimalField(
-        name="point", decimal_places=2, max_digits=5, help_text="Кол-во баллов за тип события", default=0.0
+        name="point", decimal_places=2, max_digits=5, help_text="Кол-во баллов за тип события", validators=[MinValueValidator(Decimal('0'))], default=0.0
     )
     description = models.TextField(name="description", help_text="Описание события", default="")
 
@@ -72,25 +74,26 @@ class PlansModel(models.Model):
     id = models.BigAutoField(name="id", primary_key=True)
     product = models.ForeignKey(ProductsModel, related_name="plans", on_delete=models.CASCADE, help_text="Продукт")
     date = models.DateField(name="date", default=date.today, help_text="День когда была сделана запись плана")
-    daily = models.DecimalField(name="daily", decimal_places=2, max_digits=5, help_text="Дейли", default=0.0)
+    daily = models.DecimalField(name="daily", decimal_places=2, max_digits=5, help_text="Дейли", validators=[MinValueValidator(Decimal('0'))], default=0.0)
     review_code = models.DecimalField(
-        name="review_code", decimal_places=2, max_digits=5, help_text="Ревью кода", default=0.0
+        name="review_code", decimal_places=2, max_digits=5, help_text="Ревью кода", validators=[MinValueValidator(Decimal('0'))], default=0.0
     )
     one_to_one = models.DecimalField(
-        name="one_to_one", decimal_places=2, max_digits=5, help_text="Один на один", default=0.0
+        name="one_to_one", decimal_places=2, max_digits=5, help_text="Один на один", validators=[MinValueValidator(Decimal('0'))], default=0.0
     )
     individual_plan = models.DecimalField(
-        name="individual_plan", decimal_places=2, max_digits=5, help_text="ПИР", default=0.0
+        name="individual_plan", decimal_places=2, max_digits=5, help_text="ПИР", validators=[MinValueValidator(Decimal('0'))], default=0.0
     )
     meeting_on_product = models.DecimalField(
         name="meeting_on_product",
         decimal_places=2,
         max_digits=5,
         help_text="Встреча владельца продукта с Полетаевой",
+        validators=[MinValueValidator(Decimal('0'))],
         default=0.0,
     )
     close_task = models.DecimalField(
-        name="close_task", decimal_places=2, max_digits=5, help_text="Закрытие задач", default=0.0
+        name="close_task", decimal_places=2, max_digits=5, help_text="Закрытие задач", validators=[MinValueValidator(Decimal('0'))], default=0.0
     )
 
     # Metadata
