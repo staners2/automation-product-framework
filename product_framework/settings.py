@@ -25,8 +25,6 @@ SECRET_KEY = "django-insecure-lv^q2fwo!0vjz9j(h-&%zwtew!&oyys=5^mx5(^7za6bh)$@q-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# APPEND_SLASH = False
-
 ALLOWED_HOSTS = []
 
 # Allow only json response
@@ -59,6 +57,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_extensions",  # для print sql query shell_plus
     "django_cron",  # django crontab
+    "drf_yasg" # swagger
 ]
 
 MIDDLEWARE = [

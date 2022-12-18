@@ -13,6 +13,7 @@ from product_app.serializers.events.GetEventsSerializer import GetEventsSerializ
 class EventsViewSets(ModelViewSet):  # viewsets.ViewSet
     # queryset = EventTypesModel.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter]
+    # serializer_class = GetEventsSerializer
     filterset_fields = []
     filterset_class = EventsDateFilter
     search_fields = ["product", "type"]

@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from product_app.models import NamespacesModel
+from product_app.models import ChatsModel
 
 
 class ChatsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NamespacesModel
+        model = ChatsModel
         fields = "__all__"
