@@ -8,3 +8,7 @@ poetry run python manage.py migrate django_cron
 python manage.py runcrons "product_app.cron.EventDaily.EventDaily"
 python manage.py runcrons --force
 python manage.py runcrons --silent
+
+TODO:
+- [ ] Подставлять разные сериализаторы в Swagger 
+- [ ] [Добавить проверку на уникальность обновляемых событий у каждого продукта](product_app/serializers/events/CreateEventSerializer.py)
