@@ -1,15 +1,6 @@
 # module models
 from .models import ChatsModel, EmployeesModel, EventTypesModel, EventsModel, NamespacesModel, PlansModel, ProductsModel
 
-# module serializers
-from product_app.serializers.ChatsSerializer import ChatsSerializer
-from product_app.serializers.EmployeesSerializer import EmployeesSerializer
-from product_app.serializers.EventTypesSerializer import EventTypesSerializer
-from product_app.serializers.EventsSerializer import EventsSerializer
-from product_app.serializers.NamespacesSerializer import NamespacesSerializer
-from product_app.serializers.PlansSerializer import PlansSerializer
-from product_app.serializers.ProductsSerializer import ProductsSerializer
-
 # module viewsets
 from product_app.controllers.EventTypesViewSets import EventTypesViewSets
 from product_app.controllers.ProductsViewSets import ProductsViewSets

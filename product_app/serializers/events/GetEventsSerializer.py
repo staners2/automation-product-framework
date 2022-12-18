@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from product_app.models import EventsModel
-from product_app.serializers import EventTypesSerializer, ProductsSerializer
+from product_app.serializers.EventTypesSerializer import EventTypesSerializer
+from product_app.serializers.ProductsSerializer import ProductsSerializer
 
 
 class GetEventsSerializer(serializers.ModelSerializer):
