@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import ProductsModel, ChatsModel, PlansModel, EventsModel, EventTypesModel, NamespacesModel, EmployeesModel
+from .models.ProductsModel import ProductsModel
+from .models.ChatsModel import ChatsModel
+from .models.PlansModel import PlansModel
+from .models.EventsModel import EventsModel
+from .models.EventTypesModel import EventTypesModel
+from .models.NamespacesModel import NamespacesModel
+from .models.EmployeesModel import EmployeesModel
+
 
 # Register your samples here.
 
