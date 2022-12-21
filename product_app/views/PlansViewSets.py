@@ -12,7 +12,6 @@ from product_app.serializers.plans.UpdatePlansSerializer import UpdatePlansSeria
 
 
 class PlansViewSets(ModelViewSet):  # viewsets.ViewSet
-    # queryset = EventTypesModel.objects.all()
     serializer_class = GetPlansSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = []
