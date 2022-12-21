@@ -8,9 +8,12 @@ from product_app.serializers.NamespacesSerializer import NamespacesSerializer
 
 class ProductsSerializer(serializers.ModelSerializer):
 
-    namespaces = NamespacesSerializer(many=True)
-    chats = ChatsSerializer(many=True)
-    employees = EmployeesSerializer(many=True)
+    namespaces = NamespacesSerializer(many=True, required=False)
+    chats = ChatsSerializer(many=True, required=False)
+    employees = EmployeesSerializer(many=True, required=False)
+
+    base_namespace = NamespacesSerializer(many=False, required=False)
+    base_chat_id = ChatsSerializer(many=False, required=False)
 
     class Meta:
         model = ProductsModel
