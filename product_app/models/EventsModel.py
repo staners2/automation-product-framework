@@ -1,11 +1,12 @@
 from django.db import models
+from rest_framework.generics import GenericAPIView
 
 from product_app.models.EventTypesModel import EventTypesModel
 from product_app.models.ProductsModel import ProductsModel
 
 
 class EventsModel(models.Model):
-
+    GenericAPIView
     # Fields
     id = models.BigAutoField(name="id", primary_key=True)
     type = models.ForeignKey(EventTypesModel, related_name="types", on_delete=models.CASCADE, help_text="Тип события")
