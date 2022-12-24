@@ -5,7 +5,7 @@ class EmployeesModel(models.Model):
     # Fields
     id = models.BigAutoField(name="id", primary_key=True)
     login = models.TextField(name="login", help_text="Логин сотрудника")
-    full_name = models.TextField(name="full_name", help_text="ФИО сотрудника")
+    full_name = models.TextField(name="full_name", null=True, default=None, help_text="ФИО сотрудника")
     is_developer = models.BooleanField(name="is_developer", default=False, help_text="Разработчик продукта?")
     is_manager = models.BooleanField(name="is_manager", default=False, help_text="Руководитель продукта?")
 
