@@ -4,10 +4,7 @@ from django.db import models
 class NamespacesModel(models.Model):
     # Fields
     id = models.BigAutoField(name="id", primary_key=True)
-    name = models.TextField(name="name", help_text="Название пространства Jira")
-
-    def natural_key(self):
-        return "fsdfsdf"
+    title = models.TextField(name="title", help_text="Название пространства Jira")
 
     # Metadata
     class Meta:
@@ -16,4 +13,4 @@ class NamespacesModel(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.name
+        return self.title
