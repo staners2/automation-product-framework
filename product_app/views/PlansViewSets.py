@@ -12,7 +12,6 @@ from product_app.serializers.plans.UpdatePlansSerializer import UpdatePlansSeria
 
 
 class PlansViewSets(ModelViewSet):  # viewsets.ViewSet
-    serializer_class = GetPlansSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = []
     filterset_class = PlansDateFilter
@@ -21,6 +20,22 @@ class PlansViewSets(ModelViewSet):  # viewsets.ViewSet
     # override get queryset
     def get_queryset(self):
         return PlansModel.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = GetPlansSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = GetPlansSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = GetPlansSerializer(instance)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         serializer = CreatePlansSerializer(data=request.data)
@@ -42,6 +57,10 @@ class PlansViewSets(ModelViewSet):  # viewsets.ViewSet
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs["partial"] = True
+        return self.update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
