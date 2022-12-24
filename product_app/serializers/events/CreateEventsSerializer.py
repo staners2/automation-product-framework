@@ -4,8 +4,6 @@ from product_app.models.EmployeesModel import EmployeesModel
 from product_app.models.EventTypesModel import EventTypesModel
 from product_app.models.EventsModel import EventsModel
 from product_app.models.ProductsModel import ProductsModel
-from product_app.serializers.EventTypesSerializer import EventTypesSerializer
-from product_app.serializers.products.GetProductsSerializer import GetProductsSerializer
 
 
 class CreateEventsSerializer(serializers.ModelSerializer):

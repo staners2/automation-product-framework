@@ -7,10 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from product_app.filters.EventsDateFilter import EventsDateFilter
-from product_app.models.EmployeesModel import EmployeesModel
-from product_app.models.EventTypesModel import EventTypesModel
 from product_app.models.EventsModel import EventsModel
-from product_app.models.ProductsModel import ProductsModel
 from product_app.serializers.events.CreateEventsSerializer import CreateEventsSerializer
 from product_app.serializers.events.GetEventsSerializer import GetEventsSerializer
 from product_app.serializers.events.UpdateEventsSerializer import UpdateEventsSerializer

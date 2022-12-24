@@ -5,6 +5,7 @@ from django.db import models
 from datetime import date
 
 from product_app.models.ProductsModel import ProductsModel
+from product_framework import settings
 
 
 class PlansModel(models.Model):
@@ -12,7 +13,7 @@ class PlansModel(models.Model):
     # Fields
     id = models.BigAutoField(name="id", primary_key=True)
     product = models.ForeignKey(ProductsModel, related_name="plans", on_delete=models.CASCADE, help_text="Продукт")
-    date = models.DateField(name="date", default=date.today, help_text="День когда была сделана запись плана")
+    date = models.DateField(name="date", help_text="День когда была сделана запись плана")
     daily = models.DecimalField(
         name="daily",
         decimal_places=2,
@@ -69,4 +70,4 @@ class PlansModel(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return f"{self.product.name} | {self.date}"
+        return f"{self.product.title} | {self.date}"
