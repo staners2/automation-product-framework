@@ -1,15 +1,18 @@
 from rest_framework import serializers
 
 from product_app.models.EventsModel import EventsModel
+from product_app.serializers.EmployeesSerializer import EmployeesSerializer
 from product_app.serializers.EventTypesSerializer import EventTypesSerializer
-from product_app.serializers.ProductsSerializer import ProductsSerializer
+from product_app.serializers.products.ProductsSerializer import ProductsSerializer
+from product_framework import settings
 
 
 class GetEventsSerializer(serializers.ModelSerializer):
 
-    # types = serializers.StringRelatedField(many=False)
-    type = EventTypesSerializer(many=False, required=False)
-    product = ProductsSerializer(many=False, required=False)
+    date = serializers.DateField(required=True)
+    type = EventTypesSerializer(many=False)
+    product = ProductsSerializer(many=False)
+    assignee = EmployeesSerializer(many=False)
 
     class Meta:
         model = EventsModel
