@@ -17,7 +17,7 @@ class EventTypesModel(models.Model):
         validators=[MinValueValidator(Decimal("0"))],
         default=0.0,
     )
-    description = models.TextField(name="description", help_text="Описание события", default="")
+    description = models.TextField(name="description", default=None, null=True, help_text="Описание события")
 
     # Metadata
     class Meta:

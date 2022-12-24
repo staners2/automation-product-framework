@@ -5,14 +5,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from product_app.models.NamespacesModel import NamespacesModel
-from product_app.serializers.NamespacesSerializer import NamespacesSerializer
 from product_app.serializers.namespaces.CreateNamespacesSerializer import CreateNamespacesSerializer
 from product_app.serializers.namespaces.GetNamespacesSerializer import GetNamespacesSerializer
 from product_app.serializers.namespaces.UpdateChatsSerializer import UpdateNamespacesSerializer
 
 
 class NamespacesViewSets(ModelViewSet):
-    serializer_class = NamespacesSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = []
     search_fields = []
