@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from product_app.models.PlansModel import PlansModel
 from product_app.models.ProductsModel import ProductsModel
-from product_app.serializers.products.ProductsSerializer import ProductsSerializer
 
 
 class UpdatePlansSerializer(serializers.ModelSerializer):

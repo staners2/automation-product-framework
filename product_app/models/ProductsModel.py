@@ -26,10 +26,10 @@ class ProductsModel(models.Model):
         on_delete=models.SET_NULL,
         help_text="Чат для отправки оповещений",
     )
-    is_active = models.BooleanField(name="is_active", default=True, help_text="Проект активен?")
     employees = models.ManyToManyField(EmployeesModel, related_name="employees", null=True)
     namespaces = models.ManyToManyField(NamespacesModel, related_name="namespaces", null=True)
     chats = models.ManyToManyField(ChatsModel, related_name="chats", null=True)
+    is_active = models.BooleanField(name="is_active", default=True, help_text="Проект активен?")
 
     # Metadata
     class Meta:
