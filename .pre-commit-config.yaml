@@ -1,0 +1,94 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: check-added-large-files
+        args:
+        -  --maxkb 500
+    -   id: check-ast
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: double-quote-string-fixer
+    -   id: name-tests-test
+    -   id: requirements-txt-fixer
+    -   id: detect-private-key
+    -   id: check-toml
+    -   id: pretty-format-json
+    -   id: check-json
+-   repo: https://github.com/PyCQA/prospector
+    rev: 1.7.5
+    hooks:
+    -   id: prospector
+        additional_dependencies:
+        -   ".[with_mypy,with_bandit,with_pylint]"
+        args:
+        -   --with-tool=mypy
+        -   --with-tool=bandit
+        -   --with-tool=pylint
+        -   --summary-only
+        -   --zero-exit
+# Сортировка import'ов
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.11.4
+    hooks:
+    -   id: isort
+-   repo: https://github.com/PyCQA/autoflake
+    rev: v2.0.0
+    hooks:
+    -   id: autoflake
+        args:
+        -  --remove-all-unused-imports
+        -  --in-place
+-   repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.4.0
+    hooks:
+    -   id: add-trailing-comma
+        args: [--py36-plus]
+# Проверка секретов
+-   repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+    -   id: detect-secrets
+# Линтер для gitlab ci
+-   repo: https://gitlab.com/devopshq/gitlab-ci-linter
+    rev: v1.0.2
+    hooks:
+      - id: gitlab-ci-linter
+        args:
+        -  --server https://gitlab.eltc.ru
+        -  --filename gitlab-ci.yml
+# Заменять tabs на пробелы
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.3.1
+    hooks:
+    -   id: forbid-tabs
+    -   id: remove-tabs
+        args: [--whitespaces-count, '4']
+#-   repo: https://github.com/jumanjihouse/pre-commit-hooks
+#    rev: 3.0.0
+#    hooks:
+#    -   id: markdownlint
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+    -   id: pyupgrade
+        args: [--py37-plus]
+# Форматирование под pep8
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v2.0.1
+    hooks:
+    -   id: autopep8
+-   repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+    -   id: flake8
+-   repo: https://github.com/ambv/black
+    rev: 22.12.0
+    hooks:
+    -   id: black
+-   repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.4.0
+    hooks:
+    -   id: add-trailing-comma
