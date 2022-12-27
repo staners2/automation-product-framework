@@ -12,6 +12,29 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+from dynaconf import Dynaconf
+
+_settings = Dynaconf(load_dotenv=True, envvar_prefix=False)
+
+# Celery settings
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+# App settings
+BOT_TOKEN = _settings.BOT_TOKEN
+SAURON_CLIENT_SECRET = _settings.SAURON_CLIENT_SECRET
+
+JIRABOT_USERNAME = _settings.JIRABOT_USERNAME
+JIRABOT_PASSWORD = _settings.JIRABOT_PASSWORD
+
+JIRA_USER = _settings.JIRA_USER
+JIRA_PASSWORD = _settings.JIRA_PASSWORD
+
+DATABASE_USER = _settings.DATABASE_USER
+DATABASE_PASSWORD = _settings.DATABASE_PASSWORD
+DATABASE_HOST = _settings.DATABASE_HOST
+DATABASE_PORT = _settings.DATABASE_PORT
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +48,7 @@ SECRET_KEY = "django-insecure-lv^q2fwo!0vjz9j(h-&%zwtew!&oyys=5^mx5(^7za6bh)$@q-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Allow only json response
 REST_FRAMEWORK = {
@@ -35,14 +58,17 @@ REST_FRAMEWORK = {
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.BasicAuthentication',
     # )
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "COERCE_DECIMAL_TO_STRING": False,  # Возвращает поля Decimal в API числом
 }
 
 # Django debug for docker
 # if DEBUG:
-#     import socket  # only if you haven't already imported this
-#
-#     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-#     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+# import socket  # only if you haven't already imported this
+
+# hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+# INTERNAL_IPS = [ip[: ip.rfind('.')] + '.1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
 
 # Application definition
 
@@ -56,8 +82,8 @@ INSTALLED_APPS = [
     "product_app",
     "debug_toolbar",
     "django_extensions",  # для print sql query shell_plus
-    "django_cron",  # django crontab
-    "drf_yasg",  # swagger
+    "django_crontab",  # django crontab
+    # 'drf_yasg',  # swagger
 ]
 
 MIDDLEWARE = [
@@ -69,7 +95,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",  # django debug
-    "debug_toolbar_force.middleware.ForceDebugToolbarMiddleware",  # Для debug ответов json |
+    # Для debug ответов json |
+    "debug_toolbar_force.middleware.ForceDebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "product_framework.urls"
@@ -115,15 +142,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru"
 
-TIME_ZONE = "UTC"
+USE_I18N = False
 
-USE_I18N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
-DATE_INPUT_FORMATS = ["%d-%m-%Y"]
+DATE_INPUT_FORMATS = ["%Y-%d-%m"]
+# DATE_INPUT_FORMATS = ['%d-%m-%Y']
+# DATE_FORMAT = ['%d-%m-%Y']
 
 
 # Static files (CSS, JavaScript, Images)
@@ -135,39 +164,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-# LOGGING = {
-#     'version': 1,
-#     'formatters': {
-#         'verbose': {
-#             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-#         },
-#         'simple': {
-#             'format': '%(levelname)s %(message)s'
-#         },
-#     },
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'simple'
-#         },
-#         # 'file': {
-#         #     'level': 'DEBUG',
-#         #     'class': 'logging.FileHandler',
-#         #     'filename': '/Users/staners2/Desktop/automation-product-framework/log.log',
-#         #     'formatter': 'simple'
-#         # },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'], # file
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     }
-# }
 
 
 # Database
@@ -182,22 +178,16 @@ if DEBUG:
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
-        }
+        },
     }
 else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": "myproject",
-            "USER": "myprojectuser",
-            "PASSWORD": "password",
-            "HOST": "localhost",
-            "PORT": "",
-        }
+            "USER": f"{_settings.DATABASE_USER}",
+            "PASSWORD": f"{_settings.DATABASE_PASSWORD}",
+            "HOST": f"{_settings.DATABASE_HOST}",
+            "PORT": f"{_settings.DATABASE_PORT}",
+        },
     }
-
-
-CRON_CLASSES = [
-    "product_app.jobs.EventDailyJob.EventDailyJob",
-    # ...
-]
