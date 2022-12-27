@@ -10,25 +10,27 @@ repos:
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: debug-statements
-    -   id: double-quote-string-fixer
+#    -   id: double-quote-string-fixer
     -   id: name-tests-test
     -   id: requirements-txt-fixer
     -   id: detect-private-key
     -   id: check-toml
     -   id: pretty-format-json
     -   id: check-json
--   repo: https://github.com/PyCQA/prospector
-    rev: 1.7.5
-    hooks:
-    -   id: prospector
-        additional_dependencies:
-        -   ".[with_mypy,with_bandit,with_pylint]"
-        args:
-        -   --with-tool=mypy
-        -   --with-tool=bandit
-        -   --with-tool=pylint
-        -   --summary-only
-        -   --zero-exit
+# Не разобрался с его работой
+#-   repo: https://github.com/PyCQA/prospector
+#    rev: 1.7.5
+#    hooks:
+#    -   id: prospector
+#        additional_dependencies:
+#        -   ".[with_mypy,with_bandit,with_pylint]"
+#        args:
+#        -   --with-tool=mypy
+#        -   --with-tool=bandit
+#        -   --with-tool=pylint
+#        -   --summary-only
+#        -   --zero-exit
+#        -   --max-line-length 120
 # Сортировка import'ов
 -   repo: https://github.com/PyCQA/isort
     rev: 5.11.4
@@ -80,14 +82,11 @@ repos:
     rev: v2.0.1
     hooks:
     -   id: autopep8
--   repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-    -   id: flake8
 -   repo: https://github.com/ambv/black
     rev: 22.12.0
     hooks:
     -   id: black
+        language_version: python3.10
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v2.4.0
     hooks:
