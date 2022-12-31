@@ -9,7 +9,7 @@ class CreateEventTypesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventTypesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
     def validate(self, attrs):
         return attrs

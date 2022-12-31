@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils import timezone
 
 
 class EventTypesModel(models.Model):
@@ -18,6 +19,8 @@ class EventTypesModel(models.Model):
         default=0.0,
     )
     description = models.TextField(name="description", default=None, null=True, help_text="Описание события")
+    updated = models.DateTimeField(name="updated", help_text="Время обновления", default=timezone.now)
+    deleted = models.DateTimeField(name="deleted", help_text="Время удаления", default=None, blank=True, null=True)
 
     # Metadata
     class Meta:
