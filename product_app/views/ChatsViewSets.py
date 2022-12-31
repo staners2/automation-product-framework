@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.filters import SearchFilter
@@ -5,23 +6,19 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from product_app.models.ChatsModel import ChatsModel
-
 from product_app.serializers.chats.CreateChatsSerializer import CreateChatsSerializer
 from product_app.serializers.chats.GetChatsSerializer import GetChatsSerializer
 from product_app.serializers.chats.UpdateChatsSerializer import UpdateChatsSerializer
 
 
-class ChatsViewSets(ModelViewSet):  # viewsets.ViewSet
-    # queryset = EventTypesModel.objects.all()
+class ChatsViewSets(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = []
-    search_fields = []
+    filterset_fields = []  # type: ignore
+    search_fields = []  # type: ignore
 
-    # override get queryset
     def get_queryset(self):
-        return ChatsModel.objects.all()
+        return ChatsModel.objects.filter(deleted=None).all()
 
-    # business logic create object
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -60,6 +57,12 @@ class ChatsViewSets(ModelViewSet):  # viewsets.ViewSet
     def partial_update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
+
+    def perform_destroy(self, instance):
+        date = timezone.now()
+        instance.deleted = date
+        instance.updated = date
+        instance.save()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
