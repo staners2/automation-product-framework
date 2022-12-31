@@ -10,4 +10,4 @@ class GetPlansSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlansModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
