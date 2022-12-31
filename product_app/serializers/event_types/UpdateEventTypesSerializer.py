@@ -1,21 +1,36 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from product_app.models.EventTypesModel import EventTypesModel
-from product_app.models.EventsModel import EventsModel
 
 
 class UpdateEventTypesSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField(required=False)
+
     class Meta:
         model = EventTypesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
     def validate(self, attrs):
+        if (
+            EventTypesModel.objects.exclude(id=self.instance.id)
+            .filter(
+                title=attrs.get("title", self.instance.title),
+                deleted=None,
+            )
+            .count()
+            != 0
+        ):
+            raise serializers.ValidationError("Тип события с таким названием уже существует!")
+
         return attrs
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)
         instance.point = validated_data.get("point", instance.point)
         instance.description = validated_data.get("description", instance.description)
+        instance.updated = timezone.now()
         instance.save()
 
         return instance
