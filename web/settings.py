@@ -68,6 +68,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "COERCE_DECIMAL_TO_STRING": False,  # Возвращает поля Decimal в API числом
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "40/second",
+        "user": "40/second",
+    },
 }
 
 # Django debug for docker
