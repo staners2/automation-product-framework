@@ -2,10 +2,9 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.db import models
-from datetime import date
+from django.utils import timezone
 
 from product_app.models.ProductsModel import ProductsModel
-from product_framework import settings
 
 
 class PlansModel(models.Model):
@@ -62,6 +61,8 @@ class PlansModel(models.Model):
         validators=[MinValueValidator(Decimal("0"))],
         default=0.0,
     )
+    updated = models.DateTimeField(name="updated", help_text="Время обновления", default=timezone.now)
+    deleted = models.DateTimeField(name="deleted", help_text="Время удаления", default=None, blank=True, null=True)
 
     # Metadata
     class Meta:

@@ -6,16 +6,19 @@ from product_app.models.ProductsModel import ProductsModel
 
 class CreatePlansSerializer(serializers.ModelSerializer):
 
-    product = serializers.PrimaryKeyRelatedField(queryset=ProductsModel.objects, required=True, many=False)
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=ProductsModel.objects.filter(deleted=None).all(),
+        required=True,
+        many=False,
+    )
 
     class Meta:
         model = PlansModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
-    # TODO: Валидацию на то что у одного продукта запись может быть только одна за месяц
     # TODO: Сделать проверку формата даты записи только на 1 число каждого месяца
     def validate(self, attrs):
-        if PlansModel.objects.filter(product=self.initial_data["product"], date=self.initial_data["date"]).count() != 0:
+        if PlansModel.objects.filter(product=attrs.get("product"), date=attrs.get("date"), deleted=None).count() != 0:
             raise serializers.ValidationError("План на этот месяц уже составлен")
 
         return attrs

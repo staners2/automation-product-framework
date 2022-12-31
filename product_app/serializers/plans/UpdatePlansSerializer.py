@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from product_app.models.PlansModel import PlansModel
@@ -7,11 +8,15 @@ from product_app.models.ProductsModel import ProductsModel
 class UpdatePlansSerializer(serializers.ModelSerializer):
 
     date = serializers.DateField(required=False)
-    product = serializers.PrimaryKeyRelatedField(queryset=ProductsModel.objects, required=False, many=False)
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=ProductsModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=False,
+    )
 
     class Meta:
         model = PlansModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
     # TODO: Валидацию на то что у одного продукта запись может быть только одна за месяц
     def validate(self, attrs):
@@ -20,6 +25,7 @@ class UpdatePlansSerializer(serializers.ModelSerializer):
             .filter(
                 product=self.initial_data.get("product", self.instance.product.id),
                 date=self.initial_data.get("date", self.instance.date),
+                deleted=None,
             )
             .count()
             != 0
@@ -37,6 +43,7 @@ class UpdatePlansSerializer(serializers.ModelSerializer):
         instance.individual_plan = validated_data.get("individual_plan", instance.individual_plan)
         instance.meeting_on_product = validated_data.get("meeting_on_product", instance.meeting_on_product)
         instance.close_task = validated_data.get("close_task", instance.close_task)
+        instance.updated = timezone.now()
         instance.save()
 
         return instance
