@@ -2,8 +2,12 @@ from rest_framework import serializers
 
 from product_app.models.ProductsModel import ProductsModel
 from product_app.serializers.chats.GetChatsSerializer import GetChatsSerializer
-from product_app.serializers.employees.GetEmployeesSerializer import GetEmployeesSerializer
-from product_app.serializers.namespaces.GetNamespacesSerializer import GetNamespacesSerializer
+from product_app.serializers.employees.GetEmployeesSerializer import (
+    GetEmployeesSerializer,
+)
+from product_app.serializers.namespaces.GetNamespacesSerializer import (
+    GetNamespacesSerializer,
+)
 
 
 class GetProductsSerializer(serializers.ModelSerializer):
