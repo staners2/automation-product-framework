@@ -10,5 +10,11 @@ python manage.py runcrons --force
 python manage.py runcrons --silent
 
 TODO:
-- [ ] Подставлять разные сериализаторы в Swagger 
-- [ ] [Добавить проверку на уникальность обновляемых событий у каждого продукта](product_app/serializers/events/CreateEventSerializer.py)
+- [ ] Подставлять разные сериализаторы в Swagger
+- [ ] [Добавить проверку на уникальность обновляемых событий у каждого продукта](web/serializers/events/CreateEventsSerializer.py)
+
+
+Запуск celery:
+Worker: celery -A web.celery worker --loglevel=info -P eventlet
+
+Планировщик: celery -A web.celery beat --loglevel=info
