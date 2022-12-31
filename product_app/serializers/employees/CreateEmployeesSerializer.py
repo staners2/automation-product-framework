@@ -6,12 +6,13 @@ from product_app.models.EmployeesModel import EmployeesModel
 class CreateEmployeesSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
     def validate(self, attrs):
         if (
             EmployeesModel.objects.filter(
                 login=self.initial_data["login"],
+                deleted=None,
             ).count()
             != 0
         ):
