@@ -76,6 +76,7 @@ REST_FRAMEWORK = {
         "anon": "40/second",
         "user": "40/second",
     },
+    # "EXCEPTION_HANDLER": "web.views.api_exception_handler.api_exception_handler",  # Custom handler exception api
 }
 
 # Django debug for docker
