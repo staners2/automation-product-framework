@@ -32,6 +32,10 @@ repos:
 #        -   --zero-exit
 #        -   --max-line-length 120
 # Сортировка import'ов
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.991
+    hooks:
+      - id: mypy
 -   repo: https://github.com/PyCQA/isort
     rev: 5.11.4
     hooks:
@@ -77,11 +81,6 @@ repos:
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
-# Форматирование под pep8
--   repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.1
-    hooks:
-    -   id: autopep8
 -   repo: https://github.com/ambv/black
     rev: 22.12.0
     hooks:
