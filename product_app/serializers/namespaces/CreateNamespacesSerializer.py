@@ -6,11 +6,10 @@ from product_app.models.NamespacesModel import NamespacesModel
 class CreateNamespacesSerializer(serializers.ModelSerializer):
     class Meta:
         model = NamespacesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
-    # TODO: Валидацию на то что пространства уникальны
     def validate(self, attrs):
-        if NamespacesModel.objects.filter(title=self.initial_data["title"]).count() != 0:
+        if NamespacesModel.objects.filter(title=self.initial_data["title"], deleted=None).count() != 0:
             raise serializers.ValidationError("Такое пространство уже существует!")
 
         return attrs

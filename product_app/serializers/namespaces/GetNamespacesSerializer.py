@@ -6,4 +6,4 @@ from product_app.models.NamespacesModel import NamespacesModel
 class GetNamespacesSerializer(serializers.ModelSerializer):
     class Meta:
         model = NamespacesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")

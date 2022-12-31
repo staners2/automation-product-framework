@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.filters import SearchFilter
@@ -5,19 +6,24 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from product_app.models.NamespacesModel import NamespacesModel
-from product_app.serializers.namespaces.CreateNamespacesSerializer import CreateNamespacesSerializer
-from product_app.serializers.namespaces.GetNamespacesSerializer import GetNamespacesSerializer
-from product_app.serializers.namespaces.UpdateChatsSerializer import UpdateNamespacesSerializer
+from product_app.serializers.namespaces.CreateNamespacesSerializer import (
+    CreateNamespacesSerializer,
+)
+from product_app.serializers.namespaces.GetNamespacesSerializer import (
+    GetNamespacesSerializer,
+)
+from product_app.serializers.namespaces.UpdateNamespacesSerializer import (
+    UpdateNamespacesSerializer,
+)
 
 
 class NamespacesViewSets(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = []
-    search_fields = []
+    filterset_fields = []  # type: ignore
+    search_fields = []  # type: ignore
 
-    # override get queryset
     def get_queryset(self):
-        return NamespacesModel.objects.all()
+        return NamespacesModel.objects.filter(deleted=None).all()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -57,6 +63,12 @@ class NamespacesViewSets(ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
+
+    def perform_destroy(self, instance):
+        date = timezone.now()
+        instance.deleted = date
+        instance.updated = date
+        instance.save()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
