@@ -1,10 +1,9 @@
 from django.db import models
-from rest_framework.generics import GenericAPIView
+from django.utils import timezone
 
 from product_app.models.EmployeesModel import EmployeesModel
 from product_app.models.EventTypesModel import EventTypesModel
 from product_app.models.ProductsModel import ProductsModel
-from product_framework import settings
 
 
 class EventsModel(models.Model):
@@ -13,11 +12,19 @@ class EventsModel(models.Model):
     type = models.ForeignKey(EventTypesModel, related_name="types", on_delete=models.CASCADE, help_text="Тип события")
     product = models.ForeignKey(ProductsModel, related_name="event", on_delete=models.CASCADE, help_text="Продукт")
     assignee = models.ForeignKey(
-        EmployeesModel, related_name="assignee", on_delete=models.CASCADE, help_text="Исполнитель"
+        EmployeesModel,
+        related_name="assignee",
+        default=None,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        help_text="Исполнитель",
     )
     date = models.DateField(name="date", help_text="Дата проведения события")
     url = models.URLField(name="url", null=True, help_text="Ссылка на задачу в Jira")
     description = models.TextField(name="description", default=None, null=True, help_text="Название события")
+    updated = models.DateTimeField(name="updated", help_text="Время обновления", default=timezone.now)
+    deleted = models.DateTimeField(name="deleted", help_text="Время удаления", default=None, blank=True, null=True)
 
     # Metadata
     class Meta:
