@@ -1,19 +1,23 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from product_app.models.NamespacesModel import NamespacesModel
 
 
 class UpdateNamespacesSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField(required=False)
+
     class Meta:
         model = NamespacesModel
-        fields = "__all__"
+        exclude = ("updated", "deleted")
 
-    # TODO: Валидацию на то что пространства уникальны
     def validate(self, attrs):
         if (
             NamespacesModel.objects.exclude(id=self.instance.id)
             .filter(
-                title=self.initial_data["title"],
+                title=attrs.get("title", self.instance.title),
+                deleted=None,
             )
             .count()
             != 0
@@ -23,8 +27,8 @@ class UpdateNamespacesSerializer(serializers.ModelSerializer):
         return attrs
 
     def update(self, instance, validated_data):
-        instance.title = validated_data.get("title")
-        instance.chat_id = validated_data.get("chat_id")
+        instance.title = validated_data.get("title", instance.title)
+        instance.updated = timezone.now()
         instance.save()
 
         return instance
