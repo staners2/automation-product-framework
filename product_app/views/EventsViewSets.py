@@ -1,5 +1,4 @@
-import datetime
-
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.filters import SearchFilter
@@ -13,15 +12,15 @@ from product_app.serializers.events.GetEventsSerializer import GetEventsSerializ
 from product_app.serializers.events.UpdateEventsSerializer import UpdateEventsSerializer
 
 
-class EventsViewSets(ModelViewSet):  # viewsets.ViewSet
+class EventsViewSets(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = []
+    filterset_fields = []  # type: ignore
     filterset_class = EventsDateFilter
-    search_fields = ["product", "type"]
+    search_fields = ["product", "type"]  # type: ignore
 
     # override get queryset
     def get_queryset(self):
-        return EventsModel.objects.all()
+        return EventsModel.objects.filter(deleted=None).all()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -61,6 +60,12 @@ class EventsViewSets(ModelViewSet):  # viewsets.ViewSet
     def partial_update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
+
+    def perform_destroy(self, instance):
+        date = timezone.now()
+        instance.deleted = date
+        instance.updated = date
+        instance.save()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
