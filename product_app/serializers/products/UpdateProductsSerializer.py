@@ -1,8 +1,8 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from product_app.models.ChatsModel import ChatsModel
 from product_app.models.EmployeesModel import EmployeesModel
-from product_app.models.EventsModel import EventsModel
 from product_app.models.NamespacesModel import NamespacesModel
 from product_app.models.ProductsModel import ProductsModel
 
@@ -10,12 +10,32 @@ from product_app.models.ProductsModel import ProductsModel
 class UpdateProductsSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField(required=False)
-    namespaces = serializers.PrimaryKeyRelatedField(queryset=NamespacesModel.objects, required=False, many=True)
-    chats = serializers.PrimaryKeyRelatedField(queryset=ChatsModel.objects, required=False, many=True)
-    employees = serializers.PrimaryKeyRelatedField(queryset=EmployeesModel, required=False, many=True)
+    namespaces = serializers.PrimaryKeyRelatedField(
+        queryset=NamespacesModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=True,
+    )
+    chats = serializers.PrimaryKeyRelatedField(
+        queryset=ChatsModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=True,
+    )
+    employees = serializers.PrimaryKeyRelatedField(
+        queryset=EmployeesModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=True,
+    )
 
-    base_namespace = serializers.PrimaryKeyRelatedField(queryset=NamespacesModel.objects, required=False, many=False)
-    base_chat_id = serializers.PrimaryKeyRelatedField(queryset=ChatsModel.objects, required=False, many=False)
+    base_namespace = serializers.PrimaryKeyRelatedField(
+        queryset=NamespacesModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=False,
+    )
+    base_chat_id = serializers.PrimaryKeyRelatedField(
+        queryset=ChatsModel.objects.filter(deleted=None).all(),
+        required=False,
+        many=False,
+    )
     is_active = serializers.BooleanField(required=False)
 
     class Meta:
@@ -23,13 +43,16 @@ class UpdateProductsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, attrs):
-        if ProductsModel.objects.exclude(id=self.instance.id).filter(title=self.initial_data["title"]).count() != 0:
+        if (
+            ProductsModel.objects.exclude(id=self.instance.id).filter(title=attrs.get("title"), deleted=None).count()
+            != 0
+        ):
             raise serializers.ValidationError("Продукт с таким названием уже существует!")
 
         return attrs
 
     def update(self, instance, validated_data):
-        instance.title = validated_data.get("title")
+        instance.title = validated_data.get("title", instance.title)
         namespaces = validated_data.get("namespaces", instance.namespaces.all())
         chats = validated_data.get("chats", instance.chats.all())
         employees = validated_data.get("employees", instance.employees.all())
@@ -39,6 +62,7 @@ class UpdateProductsSerializer(serializers.ModelSerializer):
         instance.namespaces.add(*namespaces)
         instance.chats.add(*chats)
         instance.employees.add(*employees)
+        instance.updated = timezone.now()
         instance.save()
 
         return instance

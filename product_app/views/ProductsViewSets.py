@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -7,19 +8,22 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from product_app.models.ProductsModel import ProductsModel
-from product_app.serializers.products.CreateProductsSerializer import CreateProductsSerializer
+from product_app.serializers.products.CreateProductsSerializer import (
+    CreateProductsSerializer,
+)
 from product_app.serializers.products.GetProductsSerializer import GetProductsSerializer
-from product_app.serializers.products.UpdateProductsSerializer import UpdateProductsSerializer
+from product_app.serializers.products.UpdateProductsSerializer import (
+    UpdateProductsSerializer,
+)
 
 
 class ProductsViewSets(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = []
-    search_fields = []
-
+    filterset_fields = []  # type: ignore
+    search_fields = []  # type: ignore
 
     def get_queryset(self):
-        return ProductsModel.objects.all()
+        return ProductsModel.objects.filter(deleted=None).all()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -45,7 +49,7 @@ class ProductsViewSets(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
+        partial = kwargs.pop("partial", True)
         instance = self.get_object()
         serializer = UpdateProductsSerializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
@@ -60,13 +64,18 @@ class ProductsViewSets(ModelViewSet):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
 
+    def perform_destroy(self, instance):
+        date = timezone.now()
+        instance.deleted = date
+        instance.updated = date
+        instance.save()
+
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view(['POST', 'GET', 'PUT', 'DELETE'])
+@api_view(["POST", "GET", "PUT", "DELETE"])
 def append_employee(request: Request, pk: int):
     return Response(pk, 200)
-

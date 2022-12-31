@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from product_app.models.ChatsModel import ChatsModel
 from product_app.models.EmployeesModel import EmployeesModel
@@ -26,10 +27,12 @@ class ProductsModel(models.Model):
         on_delete=models.SET_NULL,
         help_text="Чат для отправки оповещений",
     )
-    employees = models.ManyToManyField(EmployeesModel, related_name="employees", null=True)
-    namespaces = models.ManyToManyField(NamespacesModel, related_name="namespaces", null=True)
-    chats = models.ManyToManyField(ChatsModel, related_name="chats", null=True)
+    employees = models.ManyToManyField(EmployeesModel, related_name="employees", null=True, blank=True, default=None)
+    namespaces = models.ManyToManyField(NamespacesModel, related_name="namespaces", null=True, blank=True, default=None)
+    chats = models.ManyToManyField(ChatsModel, related_name="chats", null=True, blank=True, default=None)
     is_active = models.BooleanField(name="is_active", default=True, help_text="Проект активен?")
+    updated = models.DateTimeField(name="updated", help_text="Время обновления", default=timezone.now)
+    deleted = models.DateTimeField(name="deleted", help_text="Время удаления", default=None, blank=True, null=True)
 
     # Metadata
     class Meta:
