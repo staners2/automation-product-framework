@@ -8,17 +8,18 @@ class CreateEmployeesSerializer(serializers.ModelSerializer):
         model = EmployeesModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
+    # TODO: Добавить проверку существования логинов из Sauron'a
+    def validate_login(self, value):
         if (
             EmployeesModel.objects.filter(
-                login=attrs.get("login"),
+                login=value,
                 deleted=None,
             ).count()
             != 0
         ):
             raise serializers.ValidationError("Пользователь с таким логином уже существует!")
 
-        return attrs
+        return value
 
     def create(self, validated_data):
         login = validated_data.get("login")

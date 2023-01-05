@@ -47,16 +47,16 @@ class UpdateProductsSerializer(serializers.ModelSerializer):
         model = ProductsModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
+    def validate_title(self, value):
         if (
             ProductsModel.objects.exclude(id=self.instance.id)
-            .filter(title=attrs.get("title", self.instance.title), deleted=None)
+            .filter(title=self.initial_data.get("title", self.instance.title), deleted=None)
             .count()
             != 0
         ):
             raise serializers.ValidationError("Продукт с таким названием уже существует!")
 
-        return attrs
+        return value
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)

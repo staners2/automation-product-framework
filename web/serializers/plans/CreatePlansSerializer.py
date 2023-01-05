@@ -17,11 +17,18 @@ class CreatePlansSerializer(serializers.ModelSerializer):
         exclude = ("updated", "deleted")
 
     # TODO: Сделать проверку формата даты записи только на 1 число каждого месяца
-    def validate(self, attrs):
-        if PlansModel.objects.filter(product=attrs.get("product"), date=attrs.get("date"), deleted=None).count() != 0:
+    def validate_date(self, value):
+        if (
+            PlansModel.objects.filter(
+                product=self.initial_data.get("product"),
+                date=self.initial_data.get("date"),
+                deleted=None,
+            ).count()
+            != 0
+        ):
             raise serializers.ValidationError("План на этот месяц уже составлен")
 
-        return attrs
+        return value
 
     def create(self, validated_data):
         date = validated_data.get("date")
