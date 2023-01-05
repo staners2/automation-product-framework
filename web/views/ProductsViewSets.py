@@ -19,7 +19,11 @@ class ProductsViewSets(ModelViewSet):
     search_fields = []  # type: ignore
 
     def get_queryset(self):
-        return ProductsModel.objects.filter(deleted=None).all()
+        queryset = ProductsModel.objects.filter(deleted=None).all()
+        title = self.request.query_params.get("title")
+        if title is not None:
+            queryset = queryset.filter(title__contains=title)
+        return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -47,7 +51,11 @@ class ProductsViewSets(ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", True)
         instance = self.get_object()
-        serializer = UpdateProductsSerializer(instance, data=request.data, partial=partial)
+        serializer = UpdateProductsSerializer(
+            instance,
+            data=request.data,
+            partial=partial,
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         if getattr(instance, "_prefetched_objects_cache", None):

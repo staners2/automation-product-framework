@@ -57,6 +57,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# CORS
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Allow only json response
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
@@ -66,7 +69,7 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.BasicAuthentication',
     # )
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
+    "PAGE_SIZE": 1,
     "COERCE_DECIMAL_TO_STRING": False,  # Возвращает поля Decimal в API числом
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
@@ -101,9 +104,11 @@ INSTALLED_APPS = [
     "django_extensions",  # для print sql query shell_plus
     # 'drf_yasg',  # swagger
     "django_celery_results",
+    "corsheaders",  # CORS
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -188,8 +193,36 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 if DEBUG:
     # make all loggers use the console.
-    # for logger in LOGGING['loggers']:
-    #     LOGGING['loggers'][logger]['handlers'] = ['console']
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "console": {
+                "format": "%(name)-12s %(levelname)-8s %(message)s",
+            },
+            "file": {
+                "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "console",
+            },
+            "file": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "formatter": "file",
+                "filename": "debug.log",
+            },
+        },
+        "loggers": {
+            "": {
+                "level": "DEBUG",
+                "handlers": ["console", "file"],
+            },
+        },
+    }
 
     DATABASES = {
         "default": {
