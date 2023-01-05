@@ -12,19 +12,21 @@ class UpdateNamespacesSerializer(serializers.ModelSerializer):
         model = NamespacesModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
+    def validate_title(self, value):
         if (
             NamespacesModel.objects.exclude(id=self.instance.id)
             .filter(
-                title=attrs.get("title", self.instance.title),
+                title=self.initial_data.get("title", self.instance.title),
                 deleted=None,
             )
             .count()
             != 0
         ):
-            raise serializers.ValidationError("Такое пространство уже существует!")
+            raise serializers.ValidationError(
+                "Пространство с таким названием уже существует!",
+            )
 
-        return attrs
+        return value
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)

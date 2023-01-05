@@ -11,8 +11,17 @@ class CreateEventTypesSerializer(serializers.ModelSerializer):
         model = EventTypesModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
-        return attrs
+    def validate_title(self, value):
+        if (
+            EventTypesModel.objects.filter(
+                title=value,
+                deleted=None,
+            ).count()
+            != 0
+        ):
+            raise serializers.ValidationError("Тип события с таким названием уже существует!")
+
+        return value
 
     def create(self, validated_data):
         title = validated_data.get("title")

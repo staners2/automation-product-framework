@@ -14,19 +14,36 @@ class UpdateChatsSerializer(serializers.ModelSerializer):
         exclude = ("updated", "deleted")
 
     # TODO: Валидацию на то что у одного продукта запись может быть только одна за месяц
-    def validate(self, attrs):
+    def validate_title(self, value):
         if (
             ChatsModel.objects.exclude(id=self.instance.id)
             .filter(
-                title=attrs.get("title", self.instance.title),
-                chat_id=attrs.get("chat_id", self.instance.chat_id),
+                title=self.initial_data.get(
+                    "title",
+                    self.instance.title,
+                    deleted=None,
+                ),
             )
             .count()
             != 0
         ):
-            raise serializers.ValidationError("Такой чат уже существует!")
+            raise serializers.ValidationError("Чат с таким названием уже существует!")
 
-        return attrs
+        return value
+
+    def validate_chat_id(self, value):
+        if (
+            ChatsModel.objects.exclude(id=self.instance.id)
+            .filter(
+                deleted=None,
+                chat_id=self.initial_data.get("chat_id", self.instance.chat_id),
+            )
+            .count()
+            != 0
+        ):
+            raise serializers.ValidationError("Чат с таким ID уже существует!")
+
+        return value
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", self.instance.title)

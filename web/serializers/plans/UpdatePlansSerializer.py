@@ -19,7 +19,7 @@ class UpdatePlansSerializer(serializers.ModelSerializer):
         exclude = ("updated", "deleted")
 
     # TODO: Валидацию на то что у одного продукта запись может быть только одна за месяц
-    def validate(self, attrs):
+    def validate_date(self, value):
         if (
             PlansModel.objects.exclude(id=self.instance.id)
             .filter(
@@ -32,7 +32,7 @@ class UpdatePlansSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError("План на этот месяц уже составлен")
 
-        return attrs
+        return value
 
     def update(self, instance, validated_data):
         instance.date = validated_data.get("date", instance.date)

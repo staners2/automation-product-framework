@@ -12,11 +12,11 @@ class UpdateEmployeesSerializer(serializers.ModelSerializer):
         model = EmployeesModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
+    def validate_login(self, value):
         if (
             EmployeesModel.objects.exclude(id=self.instance.id)
             .filter(
-                login=attrs.get("login", self.instance.login),
+                login=self.initial_data.get("login", self.instance.login),
                 deleted=None,
             )
             .count()
@@ -24,7 +24,7 @@ class UpdateEmployeesSerializer(serializers.ModelSerializer):
         ):
             raise serializers.ValidationError("Пользователь с таким логином уже существует!")
 
-        return attrs
+        return value
 
     def update(self, instance, validated_data):
         instance.login = validated_data.get("login", instance.login)

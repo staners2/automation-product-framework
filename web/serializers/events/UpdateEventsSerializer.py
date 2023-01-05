@@ -31,23 +31,23 @@ class UpdateEventsSerializer(serializers.ModelSerializer):
         model = EventsModel
         exclude = ("updated", "deleted")
 
-    def validate(self, attrs):
+    def validate_product(self, value):
         if (
             EventsModel.objects.exclude(id=self.instance.id)
             .filter(
-                date=attrs.get("date", self.instance.date),
-                type=attrs.get("type", self.instance.type.id),
-                product=attrs.get("product", self.instance.product.id),
-                assignee=attrs.get("assignee", self.instance.assignee.id),
-                url=attrs.get("url", self.instance.url),
+                date=self.initial_data.get("date", self.instance.date),
+                type=self.initial_data.get("type", self.instance.type.id),
+                product=self.initial_data.get("product", self.instance.product.id),
+                assignee=self.initial_data.get("assignee", self.instance.assignee.id),
+                url=self.initial_data.get("url", self.instance.url),
                 deleted=None,
             )
             .count()
             != 0
         ):
-            raise serializers.ValidationError("Такое событие уже существует!")
+            raise serializers.ValidationError("Событие уже добавлено для продукта!")
 
-        return attrs
+        return value
 
     def update(self, instance, validated_data):
         instance.date = validated_data.get("date", instance.date)
