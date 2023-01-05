@@ -307,6 +307,17 @@ python-versions = "*"
 celery = ">=5.2.3,<6.0"
 
 [[package]]
+name = "django-cors-headers"
+version = "3.13.0"
+description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "django-debug-toolbar"
 version = "3.8.1"
 description = "A configurable set of panels that display various debug information about the current request/response."
@@ -966,7 +977,7 @@ astronomy = ["skyfield", "skyfield-data"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "c1a0950a9ffe2569fa01e4dc09811b7cc3d7734befdefc1e30b7de4ef904b4c7"
+content-hash = "fd02ac0948da5fe82caae88fcbf82c58dab17b9f9079423ed9294adcf2103bf6"
 
 [metadata.files]
 amqp = []
@@ -991,6 +1002,7 @@ distlib = []
 django = []
 django-celery-beat = []
 django-celery-results = []
+django-cors-headers = []
 django-debug-toolbar = []
 django-debug-toolbar-force = []
 django-extensions = []

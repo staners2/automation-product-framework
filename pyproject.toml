@@ -26,6 +26,7 @@ django-celery-results = "^2.4.0"
 eventlet = "^0.33.2"
 pystache = "^0.6.0"
 workalendar = "^16.4.0"
+django-cors-headers = "^3.13.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"

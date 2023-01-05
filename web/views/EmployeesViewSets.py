@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -22,7 +23,13 @@ class EmployeesViewSets(ModelViewSet):
 
     # override get queryset
     def get_queryset(self):
-        return EmployeesModel.objects.filter(deleted=None).all()
+        queryset = EmployeesModel.objects.filter(deleted=None).all()
+        login = self.request.query_params.get("login")
+        if login is not None:
+            queryset = queryset.filter(
+                Q(login__contains=login) | Q(full_name__contains=login),
+            )
+        return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -50,7 +57,11 @@ class EmployeesViewSets(ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        serializer = UpdateEmployeesSerializer(instance, data=request.data, partial=partial)
+        serializer = UpdateEmployeesSerializer(
+            instance,
+            data=request.data,
+            partial=partial,
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         if getattr(instance, "_prefetched_objects_cache", None):
