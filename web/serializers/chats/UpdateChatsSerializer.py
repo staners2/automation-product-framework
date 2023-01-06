@@ -21,8 +21,8 @@ class UpdateChatsSerializer(serializers.ModelSerializer):
                 title=self.initial_data.get(
                     "title",
                     self.instance.title,
-                    deleted=None,
                 ),
+                deleted=None,
             )
             .count()
             != 0
