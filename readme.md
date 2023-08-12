@@ -18,3 +18,6 @@ TODO:
 Worker: celery -A web.celery worker --loglevel=info -P eventlet
 
 Планировщик: celery -A web.celery beat --loglevel=info
+
+prehook:
+pre-commit install --hook-type commit-msg
