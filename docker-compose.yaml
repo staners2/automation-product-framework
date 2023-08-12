@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  app:
+    image: automation-product-framework-back
+    expose:
+      - "8001"
+    ports:
+      - "8001:8001"
+    networks:
+      - net
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+      cache_from:
+        - automation-product-framework-back
+
+  redis:
+    image: redis
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    networks:
+      - net
+
+
+#  nginx:
+#    image: automation-product-framework-back-nginx
+#    expose:
+#      - "8000"
+#    depends_on:
+#      - app
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - net
+#    build:
+#      context: .
+#      dockerfile: docker/nginx.Dockerfile
+#      cache_from:
+#        - automation-product-framework-back-nginx
+
+networks:
+  net:
+    driver: bridge
+

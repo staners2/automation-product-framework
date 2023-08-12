@@ -10,6 +10,17 @@ python-versions = ">=3.6"
 vine = ">=5.0.0"
 
 [[package]]
+name = "argcomplete"
+version = "2.0.0"
+description = "Bash tab completion for argparse"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+test = ["coverage", "flake8", "pexpect", "wheel"]
+
+[[package]]
 name = "arrow"
 version = "1.2.3"
 description = "Better dates & times for Python"
@@ -224,6 +235,27 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
 [[package]]
+name = "commitizen"
+version = "2.40.0"
+description = "Python commitizen client tool"
+category = "dev"
+optional = false
+python-versions = ">=3.6.2,<4.0.0"
+
+[package.dependencies]
+argcomplete = ">=1.12.1,<2.1"
+charset-normalizer = ">=2.1.0,<3.0.0"
+colorama = ">=0.4.1,<0.5.0"
+decli = ">=0.5.2,<0.6.0"
+jinja2 = ">=2.10.3"
+packaging = ">=19"
+pyyaml = ">=3.08"
+questionary = ">=1.4.0,<2.0.0"
+termcolor = {version = ">=1.1,<3", markers = "python_version >= \"3.7\""}
+tomlkit = ">=0.5.3,<1.0.0"
+typing-extensions = ">=4.0.1,<5.0.0"
+
+[[package]]
 name = "convertdate"
 version = "2.4.0"
 description = "Converts between Gregorian dates and other calendar systems"
@@ -254,6 +286,14 @@ typing-inspect = ">=0.4.0"
 
 [package.extras]
 dev = ["pytest (>=6.2.3)", "ipython", "mypy (>=0.710)", "hypothesis", "portray", "flake8", "simplejson", "types-dataclasses"]
+
+[[package]]
+name = "decli"
+version = "0.5.2"
+description = "Minimal, easy-to-use, declarative cli tool"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
 
 [[package]]
 name = "distlib"
@@ -524,6 +564,20 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "jinja2"
+version = "3.1.2"
+description = "A very fast and expressive template engine."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+MarkupSafe = ">=2.0"
+
+[package.extras]
+i18n = ["Babel (>=2.7)"]
+
+[[package]]
 name = "kombu"
 version = "5.2.4"
 description = "Messaging library for Python."
@@ -569,6 +623,14 @@ python-versions = ">=3.7"
 
 [package.extras]
 testing = ["coverage", "pyyaml"]
+
+[[package]]
+name = "markupsafe"
+version = "2.1.2"
+description = "Safely add untrusted strings to HTML/XML markup."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "marshmallow"
@@ -799,6 +861,20 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "questionary"
+version = "1.10.0"
+description = "Python library to build pretty command line user prompts ⭐️"
+category = "dev"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+prompt_toolkit = ">=2.0,<4.0"
+
+[package.extras]
+docs = ["Sphinx (>=3.3,<4.0)", "sphinx-rtd-theme (>=0.5.0,<0.6.0)", "sphinx-autobuild (>=2020.9.1,<2021.0.0)", "sphinx-copybutton (>=0.3.1,<0.4.0)", "sphinx-autodoc-typehints (>=1.11.1,<2.0.0)"]
+
+[[package]]
 name = "redis"
 version = "4.4.0"
 description = "Python client for Redis database and key-value store"
@@ -867,6 +943,17 @@ python-versions = ">=3.8"
 pbr = ">=2.0.0,<2.1.0 || >2.1.0"
 
 [[package]]
+name = "termcolor"
+version = "2.2.0"
+description = "ANSI color formatting for output in terminal"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+tests = ["pytest", "pytest-cov"]
+
+[[package]]
 name = "tokenize-rt"
 version = "5.0.0"
 description = "A wrapper around the stdlib `tokenize` which roundtrips."
@@ -881,6 +968,14 @@ description = "A lil' TOML parser"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "tomlkit"
+version = "0.11.6"
+description = "Style preserving TOML library"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
 
 [[package]]
 name = "typing-extensions"
@@ -977,10 +1072,11 @@ astronomy = ["skyfield", "skyfield-data"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "fd02ac0948da5fe82caae88fcbf82c58dab17b9f9079423ed9294adcf2103bf6"
+content-hash = "be54b423c34df33d37651d18532f7714e676da012b874371da05e4e984f6fa13"
 
 [metadata.files]
 amqp = []
+argcomplete = []
 arrow = []
 asgiref = []
 async-timeout = []
@@ -996,8 +1092,10 @@ click-didyoumean = []
 click-plugins = []
 click-repl = []
 colorama = []
+commitizen = []
 convertdate = []
 dataclasses-json = []
+decli = []
 distlib = []
 django = []
 django-celery-beat = []
@@ -1020,9 +1118,11 @@ greenlet = []
 gunicorn = []
 identify = []
 idna = []
+jinja2 = []
 kombu = []
 lunardate = []
 markdown = []
+markupsafe = []
 marshmallow = []
 marshmallow-enum = []
 mypy-extensions = []
@@ -1045,14 +1145,17 @@ python-json-logger = []
 pytz = []
 pyupgrade = []
 pyyaml = []
+questionary = []
 redis = []
 requests = []
 six = []
 smmap = []
 sqlparse = []
 stevedore = []
+termcolor = []
 tokenize-rt = []
 tomli = []
+tomlkit = []
 typing-extensions = []
 typing-inspect = []
 tzdata = []
